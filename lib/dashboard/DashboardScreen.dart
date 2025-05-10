@@ -1,3 +1,5 @@
+import 'package:e_commerce_app/ApiService/ApiService.dart';
+import 'package:e_commerce_app/dashboard/product/CategoryProductsScreen.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -9,9 +11,6 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
 
-  final List<String> categories = [
-    'Shoes', 'Beauty', 'Fashion', 'Jewelry', 'Men\'s Fashion'
-  ];
 
   final List<Map<String, dynamic>> products = [
     {
@@ -26,7 +25,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   ];
 
+  List<String> categories = [];
+  bool isLoading = true;
 
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCategoryData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +46,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: const Text("Bliss Shop", style: TextStyle(color: Colors.black)),
         actions: [
           IconButton(icon: Icon(Icons.notifications_none), onPressed: () {}),
-          IconButton(icon: Icon(Icons.shopping_cart_outlined), onPressed: () {}),
         ],
       ),
       body: SingleChildScrollView(
@@ -54,8 +60,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: TextField(
-                decoration: const InputDecoration(
+              child: const TextField(
+                decoration: InputDecoration(
                   icon: Icon(Icons.search),
                   hintText: 'Search...',
                   border: InputBorder.none,
@@ -66,34 +72,50 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
             // Horizontal Categories
             SizedBox(
-              height: 80,
-              child: ListView.separated(
+              height: 100,
+              child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: categories.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 12),
                 itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 28,
-                        backgroundColor: Colors.orange.shade100,
-                        child: Icon(Icons.category, color: Colors.deepOrange),
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ProductScreen(category: categories[index]),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 28,
+                            backgroundColor: Colors.orange.shade100,
+                            child: const Icon(
+                              Icons.category,
+                              color: Colors.deepOrange,
+                              size: 32,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            categories[index],
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 6),
-                      Text(
-                        categories[index],
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                    ],
+                    ),
                   );
                 },
               ),
             ),
 
             const SizedBox(height: 24),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
                   'Special For You',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -216,6 +238,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+
+
+  void fetchCategoryData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final fetchedCategories = await ApiService.fetchCategories();
+      setState(() {
+        categories = fetchedCategories;
+      });
+    } catch (e) {
+      // Handle error if needed
+      print("Error fetching categories: $e");
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+
 }
 
 

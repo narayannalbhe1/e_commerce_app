@@ -28,8 +28,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => SplashScreen(),
         '/login': (context) => LoginScreen(),
         '/dashboard': (context) => DashboardScreen(),
-        '/category': (context) => CategoryProductsScreen(),
-        '/product': (context) => ProductDetailScreen(),
+        '/category': (context) => ProductScreen(category: '',),
+        '/product': (context) => ProductDetailScreen(product: {},),
         '/cart': (context) => CartScreen(),
       },
     );
