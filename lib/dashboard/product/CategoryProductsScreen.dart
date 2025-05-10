@@ -41,7 +41,12 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.category)),
+      backgroundColor: Colors.grey.shade50,
+      appBar: AppBar(
+          backgroundColor: Colors.grey.shade50,
+          title: const Text("Products"
+              //widget.category
+               )),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
@@ -58,27 +63,104 @@ class _ProductScreenState extends State<ProductScreen> {
                 ),
               );
             },
-            child: Card(
-              elevation: 0.4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              child: ListTile(
-                contentPadding: const EdgeInsets.all(8),
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    product['image'],
-                    width: 100,
-                    height: 80,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                title: Text(
-                  product['title'],
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                subtitle: Text(
-                  '\$${product['price']}',
-                  style: const TextStyle(fontSize: 16),
+            child:Card(
+              elevation: 0.3,
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Product Image
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade50,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          product['image'],
+                          width: 100,
+                          height: 90,
+                          fit: BoxFit.contain,  // Changed from 'fill' to 'contain' for better aspect ratio
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+
+                    // Product Details
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Product Title
+                          Text(
+                            product['title'],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 8),
+
+                          // Price
+                          Row(
+                            children: [
+                              const Text(
+                                'Price: ',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.green,
+                                ),
+                              ),
+                              Text(
+                                '\$${product['price']}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+
+                          // Rating (added this important element)
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                                size: 16,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                product['rating']['rate'].toString(),
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey.shade700,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                '(${product['rating']['count']})',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey.shade500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
