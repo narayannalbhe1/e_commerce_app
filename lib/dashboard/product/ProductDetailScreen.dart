@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_commerce_app/dashboard/cart/CartScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -49,14 +50,31 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           child: Column(
             children: [
               // Product Image
-              Padding(
-                padding: const EdgeInsets.only(top: 80.0, left: 16, right: 16),
-                child: Center(
-                  child: Image.network(
-                    product['image'],
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    fit: BoxFit.fill,
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 40),
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    autoPlay: true,
+                    aspectRatio: 16 / 9,
+                    enlargeCenterPage: true,
+                    viewportFraction: 0.98,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
                   ),
+                  items: [
+                    // Discount Banner 1
+                    Container(
+                      margin: EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        image: DecorationImage(
+                          image: NetworkImage(product['image']),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    // Add more items as needed
+                  ],
                 ),
               ),
               const SizedBox(height: 10),
