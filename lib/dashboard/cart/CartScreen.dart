@@ -35,7 +35,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         backgroundColor: Colors.grey.shade50,
         scrolledUnderElevation: 0,
@@ -222,6 +222,7 @@ class _CartScreenState extends State<CartScreen> {
               padding: const EdgeInsets.all(16),
               decoration: const BoxDecoration(
                 color: Colors.white,
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight:Radius.circular(30))
               ),
               child: Column(
                 children: [

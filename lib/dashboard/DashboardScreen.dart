@@ -33,6 +33,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     'assets/womensCloths.png',
   ];
 
+
+  final List<Color> _colorList = [
+    Colors.brown,
+    Colors.green,
+    Colors.blue,
+    Colors.orange,
+  ];
+
   bool isLoading = true;
 
   @override
@@ -42,10 +50,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
     fetchCategoryData();
   }
 
+
+
+  Widget _buildColorCircle(Color color) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 3),
+      width: 14,
+      height: 14,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 1.5),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         scrolledUnderElevation: 0,
         backgroundColor: Colors.white,
@@ -170,7 +193,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     margin: EdgeInsets.all(5.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: Colors.deepOrange, // Fallback color
+                      color: Colors.orange, // Fallback color
                       image: const DecorationImage(
                         image: AssetImage(
                             'assets/discount.png'),
@@ -181,11 +204,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
-
             // Horizontal Categories
             SizedBox(
-              height: MediaQuery.of(context).size.width * 0.4, // adjust based on your design
+              height: MediaQuery.of(context).size.width * 0.38, // adjust based on your design
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: categories.length,
@@ -208,7 +229,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           Container(
                             width: 80,
                             height: 80,
-                            padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(0),
                             decoration: BoxDecoration(
                               color: Colors.grey[100],
                               shape: BoxShape.circle, // Makes the container circular
@@ -275,51 +296,61 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child:Stack(
                     children: [
                       Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(16),
+                        height: 260,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.network(
+                                product['image'],
+                                height: 110,
+                                width: double.infinity,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              product['title'],
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const Spacer(),
+                            Row(
+                              children: [
+                                Text(
+                                  '\$${product['price']}',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const Spacer(),
+                                ..._colorList.map((color) => _buildColorCircle(color)).toList(),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.network(
-                              product['image'],
-                              height: 130,
-                              width: double.infinity,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            product['title'],
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            '\$${product['price']}',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+
+
                       Positioned(
                         top: 0,
                         right: 0,
                         child: Container(
                           padding: const EdgeInsets.all(6),
                           decoration: const BoxDecoration(
-                            color: Colors.deepOrange,
+                            color: Colors.orange,
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(10),
                               bottomLeft: Radius.circular(10),
@@ -351,7 +382,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               IconButton(
-                icon: const Icon(Icons.dashboard, color: Colors.deepOrange),
+                icon: const Icon(Icons.dashboard, color: Colors.orange),
                 onPressed: () {},
               ),
               IconButton(
@@ -381,7 +412,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Colors.orange,
         child: const Icon(Icons.home, color: Colors.white),
         onPressed: () {
           //Navigator.pushNamed(context, '/cart');
@@ -410,4 +441,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
       });
     }
   }
+}
+
+Widget _buildColorCircle(Color color) {
+  return Container(
+    margin: const EdgeInsets.only(right: 4),
+    width: 15,
+    height: 15,
+    decoration: BoxDecoration(
+      color: color,
+      shape: BoxShape.circle,
+      border: Border.all(color: Colors.grey.shade300),
+    ),
+  );
 }

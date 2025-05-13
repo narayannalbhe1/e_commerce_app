@@ -43,14 +43,15 @@ class _ProductScreenState extends State<ProductScreen> {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
           backgroundColor: Colors.grey.shade50,
-          title: const Text("Products"
+          title: const Text("Products",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               //widget.category
                )),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         itemCount: products.length,
         itemBuilder: (context, index) {
           final product = products[index];
@@ -63,30 +64,31 @@ class _ProductScreenState extends State<ProductScreen> {
                 ),
               );
             },
-            child:Card(
-              elevation: 0.3,
+            child: Card(
+              elevation: 0.4,
               color: Colors.white,
+              margin: const EdgeInsets.only(bottom: 16),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(12),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Product Image
                     Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade50,
-                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(12),
                       ),
+                      padding: const EdgeInsets.all(8),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Image.network(
                           product['image'],
-                          width: 100,
+                          width: 90,
                           height: 90,
-                          fit: BoxFit.contain,  // Changed from 'fill' to 'contain' for better aspect ratio
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ),
@@ -97,62 +99,58 @@ class _ProductScreenState extends State<ProductScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Product Title
+                          // Title
                           Text(
                             product['title'],
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 6),
 
                           // Price
-                          Row(
-                            children: [
-                              const Text(
-                                'Price: ',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.green,
-                                ),
-                              ),
-                              Text(
-                                '\$${product['price']}',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.green,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            '\$${product['price']}',
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.deepOrange,
+                            ),
                           ),
                           const SizedBox(height: 8),
 
-                          // Rating (added this important element)
+                          // Rating Row
                           Row(
                             children: [
-                              const Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                                size: 16,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                product['rating']['rate'].toString(),
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.grey.shade700,
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: Colors.amber.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.star, color: Colors.amber, size: 16),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      '${product['rating']['rate']}',
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              const SizedBox(width: 4),
+                              const SizedBox(width: 8),
                               Text(
-                                '(${product['rating']['count']})',
+                                '(${product['rating']['count']} reviews)',
                                 style: TextStyle(
                                   fontSize: 13,
-                                  color: Colors.grey.shade500,
+                                  color: Colors.grey.shade600,
                                 ),
                               ),
                             ],
@@ -167,6 +165,7 @@ class _ProductScreenState extends State<ProductScreen> {
           );
         },
       ),
+
     );
   }
 }
