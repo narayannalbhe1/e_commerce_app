@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_commerce_app/ApiService/ApiService.dart';
 import 'package:e_commerce_app/dashboard/cart/CartScreen.dart';
 import 'package:e_commerce_app/dashboard/product/CategoryProductsScreen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -26,12 +27,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ];
 
   List<String> categories = [];
-  List<String> categoryImages = [
-    'assets/electronics.jpg',
-    'assets/jewelry.jpg',
-    'assets/mensCloth.png',
-    'assets/womensCloths.png',
-  ];
+
+  Map<String, String> categoryImageMap = {
+    'electronics': 'assets/electronics.jpg',
+    'jewelery': 'assets/jewelry.jpg',
+    "men's clothing": 'assets/mensCloth.png',
+    "women's clothing": 'assets/womensCloths.png',
+  };
 
 
   final List<Color> _colorList = [
@@ -235,9 +237,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               shape: BoxShape.circle, // Makes the container circular
                             ),
                             child: ClipOval(
-                              child: Image.asset(
-                                categoryImages[index],
-                                fit: BoxFit.cover, // or BoxFit.contain depending on your image type
+                              child:Image.asset(
+                                categoryImageMap[categories[index]] ?? Icon(Icons.category).toString(),
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
@@ -434,7 +436,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       });
     } catch (e) {
       // Handle error if needed
-      print("Error fetching categories: $e");
+      if (kDebugMode) {
+        print("Error fetching categories: $e");
+      }
     } finally {
       setState(() {
         isLoading = false;

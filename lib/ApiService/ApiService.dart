@@ -9,6 +9,7 @@ class ApiService {
     final url = Uri.parse('$baseUrl/products/categories');
     final response = await http.get(url);
 
+    print(response);
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       return data.cast<String>();
